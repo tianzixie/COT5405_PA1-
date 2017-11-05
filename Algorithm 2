@@ -1,0 +1,161 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Nov  1 18:23:12 2017
+
+@author: 0
+"""
+
+
+import numpy as np
+import math
+#customer=[40,10,10,20,30
+#          ,30,10,20,40,40
+#          ,10,10]
+customer=[40,10,10,20,30
+          ,30,10,20,40,40
+          ,10,10,30,20,10
+          ,20,20,10,10,40
+          ,30,20,10,20,30
+          ,40,20,10,20,10
+          ,20,30,40,40,20
+          ,30,20,10,30,40
+          ,20,10,40,40,20
+          ,30,30,20,10,10
+          ,20,30,40,30,20]
+#customer=[40,10,10,20,30
+#          ,40,10,20,40,40
+#          ,40,10,30,20,10
+#          ,40,20,10,10,40
+#          ,40,20,10,20,30
+#          ,40,20,10,20,10
+#          ,40,30,40,40,20
+#          ,40,20,10,30,40
+#          ,40,10,40,40,20
+#          ,40,30,20,10,10
+#          ,40,30,40,30,20]
+#customer=[10,10,20,40,30
+#          ,10,10,30,40,10
+#          ,10,10,10,40,10
+#          ,10,20,20,40,40
+#          ,10,20,20,40,30
+#          ,10,20,30,40,10
+#          ,10,30,10,40,20
+#          ,10,20,10,40,40
+#          ,10,10,20,40,20
+#          ,10,30,40,40,10
+#          ,10,30,30,40,20]
+#customer=[10,10,20,40,40
+#          ,10,10,30,40,40
+#          ,10,10,10,40,40
+#          ,10,20,20,40,40
+#          ,10,20,20,40,40
+#          ,10,20,30,40,40
+#          ,10,30,10,40,40
+#          ,10,20,10,40,40
+#          ,10,10,20,40,40
+#          ,10,30,40,40,40
+#          ,10,30,30,40,40]
+#list customer is each how much each customer pay
+ba1=[0,0,0,0,0]
+ba2=[0,0,0,0,0]
+sequence=[0,1,2,3,4]
+sequence2=[0,1,2,3,4]
+bcount=[1,1,1,1,1]
+barber=['A','B','C','D','E']
+temp=[0,0,0,0,0]
+rounds=0
+#list "bcount" is how much orders each barber taken, and which can be uncommented to calculate it
+#list "ba1" and "sequence" is for temporary data
+for i in range(5):
+    ba2[sequence[i%5]]=ba2[sequence[i%5]]+customer[i]
+    temp[i]=barber[i]
+#print first round result
+rounds=rounds+1
+print('round',rounds,':')
+print ('barber sequence of taking orders:',temp)
+print('money earned for each barber:',ba2)
+print(' ')
+mbc=0
+#mbc is the count of how much babers earned less than a certain amount
+#print(temp)
+#print(ba2)
+for i in range (5,len(customer)):
+#initializing
+    maxba2=0
+    minba2=float('inf')
+    for b in range(5):
+        if i%5==0:
+            #initialize temporary lists "ba1" and "sequence" every 5 customers
+            #for the purpose of not disturb list ba2 ans sequence2
+            
+
+            ba1[b]=ba2[b]
+            sequence[b]=sequence2[b]
+            #store data to temporary lists
+        if maxba2 <ba2[b]:
+            maxba2=ba2[b]
+        if minba2 >ba2[b]:
+            minba2=ba2[b]
+        #find max and min in list ba2
+
+    #start to change sequence if maximum difference is 20 or higher
+    if maxba2-minba2>20 and i%5==0:
+        #i%5=0 is run "change sequence"as below every 5 customers
+        
+        #calculating better sequence
+        for q in range(5):
+            for w in range(4):
+                if ba1[w]>ba1[w+1]:
+
+                    ba1[w],ba1[w+1]=ba1[w+1],ba1[w]
+
+                    sequence[w],sequence[w+1]=sequence[w+1],sequence[w]
+                    #change barber sequence of taking orders
+        #sort barber sequence from earned less to earned more
+        #make barbers earn less take orders before than barbers highier earned
+        for mb in range(5):
+            if maxba2-ba1[mb]>20:
+                
+                mbc=mbc+1
+                #count how much babers earned less than a certain amount
+        for b in range(5):
+            temp[b]=barber[sequence[b]]
+            #store sequence like: ['A', 'B', 'C', 'D', 'E']
+
+        if mbc==2:
+            sequence[4]=sequence[0]
+        #if 2 barbers both earn less than highest earned barber a certain amount,
+        #than make the most less earned barber take order more than onece in a round,
+        #and make highest earned barber out of this round
+        if mbc>2:
+            sequence[4]=sequence[0]
+            sequence[3]=sequence[1]
+        #if 3 or more barbers both earn less than highest earned barber a certain amount,
+        #than make the most less earned two barbers take order more than onece in a round,
+        #and make highest earned two barbers out of this round
+        #print (sequence,'ss1')
+
+    ba2[sequence[i%5]]=ba2[sequence[i%5]]+customer[i]
+    bcount[sequence[i%5]]=bcount[sequence[i%5]]+1
+    
+    #bcount[sequence[i%5]]=bcount[sequence[i%5]]+1
+    #calculate how much each barber earned
+    #print(bcount)
+    if (i+1)%5==0:
+        rounds=rounds+1
+        print('rounds',rounds,':')
+        print ('barber sequence of taking orders:',temp)
+        print('money earned for each barber:',ba2)
+        print(' ')
+        mbc=0
+        #print results of each and final round
+if len(customer)%5!=0:
+    rounds=rounds+1
+    print('rounds',rounds,':')
+    print ('barber sequence of taking orders:',temp)
+    print('money earned for each barber:',ba2)
+    print(' ')
+    #print result of final round
+print ('final result:',ba2)
+#print final result
+print(bcount,'with 55 customers, every barber has take different total of assignments')
