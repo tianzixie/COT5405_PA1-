@@ -1,0 +1,146 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Oct 30 17:23:52 2017
+
+@author: 0
+"""
+
+#customer=[40,10,10,20,30
+#          ,30,10,20,40,40
+#          ,10,10]
+customer=[40,10,10,20,30
+          ,30,10,20,40,40
+          ,10,10,30,20,10
+          ,20,20,10,10,40
+          ,30,20,10,20,30
+          ,40,20,10,20,10
+          ,20,30,40,40,20
+          ,30,20,10,30,40
+          ,20,10,40,40,20
+          ,30,30,20,10,10
+          ,20,30,40,30,20]
+#customer=[10,10,40,20,30
+#          ,10,10,40,10,10
+#          ,10,10,40,20,10
+#          ,10,20,40,10,40
+#          ,10,20,40,20,30
+#          ,10,20,40,20,10
+#          ,10,30,40,10,20
+#          ,10,20,40,30,40
+#          ,10,10,40,10,20
+#          ,10,30,40,10,10
+#          ,10,30,40,10,20]
+#customer=[10,10,20,40,30
+#          ,10,10,30,40,10
+#          ,10,10,10,40,10
+#          ,10,20,20,40,40
+#          ,10,20,20,40,30
+#          ,10,20,30,40,10
+#          ,10,30,10,40,20
+#          ,10,20,10,40,40
+#          ,10,10,20,40,20
+#          ,10,30,40,40,10
+#          ,10,30,30,40,20]
+#customer=[10,10,20,40,40
+#          ,10,10,30,40,40
+#          ,10,10,10,40,40
+#          ,10,20,20,40,40
+#          ,10,20,20,40,40
+#          ,10,20,30,40,40
+#          ,10,30,10,40,40
+#          ,10,20,10,40,40
+#          ,10,10,20,40,40
+#          ,10,30,40,40,40
+#          ,10,30,30,40,40]
+#customer=[40,10,20,10,10
+#          ,40,10,30,10,10
+#          ,40,10,10,10,10
+#          ,40,20,20,10,10
+#          ,40,20,20,10,10
+#          ,40,20,30,10,10
+#          ,40,30,10,10,10
+#          ,40,20,10,10,10
+#          ,40,10,20,10,10
+#          ,40,30,40,10,10
+#          ,40,30,30,10,10]
+#list customer is each how much each customer pay
+ba1=[0,0,0,0,0]
+ba2=[0,0,0,0,0]
+sequence=[0,1,2,3,4]
+sequence2=[0,1,2,3,4]
+bcount=[1,1,1,1,1]
+barber=['A','B','C','D','E']
+temp=[0,0,0,0,0]
+rounds=0
+#list "bcount" is how much orders each barber taken, and which can be uncommented to calculate it
+#list "ba1" and "sequence" is for temporary data
+for i in range(5):
+    ba2[sequence[i%5]]=ba2[sequence[i%5]]+customer[i]
+    temp[i]=barber[i]
+#print first round result
+rounds=rounds+1
+print('rounds',rounds,':')
+print ('barber sequence of taking orders:',temp)
+print('money earned for each barber:',ba2)
+print(' ')
+
+for i in range (5,len(customer)):
+#initializing
+    maxba2=0
+    minba2=float('inf')
+    for b in range(5):
+        if i%5==0:
+
+            
+            #initialize temporary lists "ba1" and "sequence" every 5 customers
+            #for the purpose of not disturb list ba2 ans sequence2
+            ba1[b]=ba2[b]
+            sequence[b]=sequence2[b]
+            #store data to temporary lists
+        if maxba2 <ba2[b]:
+            maxba2=ba2[b]
+        if minba2 >ba2[b]:
+            minba2=ba2[b]
+        #find max and min in list ba2
+
+    #start to change sequence if maximum difference is 20 or higher    
+    if maxba2-minba2>20 and i%5==0:
+        
+        #i%5=0 is run "change sequence"as below every 5 customers
+        
+        #calculating better sequence
+        for q in range(4):
+            for w in range(5):
+                if ba1[q]-ba1[w]>20 and w>q:
+
+                    ba1[q],ba1[w]=ba1[w],ba1[q]
+                    sequence[q],sequence[w]=sequence[w],sequence[q]
+                    #change barber sequence of taking orders
+        for b in range(5):
+            temp[b]=barber[sequence[b]]
+            #store sequence like: ['A', 'B', 'C', 'D', 'E']
+                
+            
+    
+    ba2[sequence[i%5]]=ba2[sequence[i%5]]+customer[i]
+    bcount[sequence[i%5]]=bcount[sequence[i%5]]+1
+    #calculate how much each barber earned
+    #print(bcount)
+    if (i+1)%5==0:
+        rounds=rounds+1
+        print('rounds',rounds,':')
+        print ('barber sequence of taking orders:',temp)
+        print('money earned for each barber:',ba2)
+        print(' ')
+        #print results of each and final round
+if len(customer)%5!=0:
+
+    rounds=rounds+1
+    print('rounds',rounds,':')
+    print ('barber sequence of taking orders:',temp)
+    print('money earned for each barber:',ba2)
+    print(' ')
+    #print result of final round
+print ('final result:',ba2)
+#print final result
+print(bcount,'with 55 customers, every barber has take 11 assignments')
